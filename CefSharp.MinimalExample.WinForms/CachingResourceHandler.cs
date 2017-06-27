@@ -20,7 +20,7 @@ namespace CefSharp.MinimalExample.WinForms
         private Stream _httpStream;
 
         private Stream _fileWriteStream;
-        private Stream _fileReaadStream;
+        private Stream _fileReadStream;
 
         public CachingResourceHandler(DirectoryInfo cacheDirectory)
         {
@@ -40,7 +40,7 @@ namespace CefSharp.MinimalExample.WinForms
 
             if (_resourceIsCached)
             {
-                _fileReaadStream = _cachedResource.ContentReadStream;
+                _fileReadStream = _cachedResource.ContentReadStream;
             }
             else
             {
@@ -82,7 +82,7 @@ namespace CefSharp.MinimalExample.WinForms
 
             if (_resourceIsCached)
             {
-                bytesRead = _fileReaadStream.Read(buffer, 0, buffer.Length);
+                bytesRead = _fileReadStream.Read(buffer, 0, buffer.Length);
 
                 dataOut.Write(buffer, 0, buffer.Length);
 
@@ -123,10 +123,10 @@ namespace CefSharp.MinimalExample.WinForms
                 _fileWriteStream.Dispose();
             }
 
-            if (_fileReaadStream != null)
+            if (_fileReadStream != null)
             {
-                _fileReaadStream.Close();
-                _fileReaadStream.Dispose();
+                _fileReadStream.Close();
+                _fileReadStream.Dispose();
             }
 
             _httpStream?.Dispose();

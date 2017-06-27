@@ -8,7 +8,7 @@ namespace CefSharp.MinimalExample.WinForms
     internal sealed class CachedResource
     {
         private const double CacheValidDays = 1;
-
+        
         private readonly string _resourceFilePath;
         private readonly string _resourceHeaderFilePath;
 
@@ -34,12 +34,20 @@ namespace CefSharp.MinimalExample.WinForms
 
         public Stream ContentWriteStream
         {
-            get { return File.OpenWrite(_resourceFilePath); }
+            get
+            {
+                //return File.OpenWrite(_resourceFilePath);
+                return File.Open(_resourceFilePath, FileMode.Create, FileAccess.Write, FileShare.Write);
+            }
         }
 
         public Stream ContentReadStream
         {
-            get { return File.OpenRead(_resourceFilePath); }
+            get
+            {
+                //return File.OpenRead(_resourceFilePath);
+                return File.Open(_resourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
         }
 
         public long ContentLength
