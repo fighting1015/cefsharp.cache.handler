@@ -18,9 +18,9 @@ namespace CefSharp.MinimalExample.WinForms
             InitializeComponent();
 
             Text = "CefSharp";
-            WindowState = FormWindowState.Maximized;
+            WindowState = FormWindowState.Normal;
 
-            browser = new ChromiumWebBrowser("www.google.com")
+            browser = new ChromiumWebBrowser("http://10.211.70.77:8031/text.html")
             {
                 Dock = DockStyle.Fill,
             };
@@ -31,6 +31,17 @@ namespace CefSharp.MinimalExample.WinForms
             browser.StatusMessage += OnBrowserStatusMessage;
             browser.TitleChanged += OnBrowserTitleChanged;
             browser.AddressChanged += OnBrowserAddressChanged;
+
+            //-- this is for opposite: remove cache-related handlers from not-home resources
+            ////browser.RequestHandler = new CachePreventingRequestHandler();
+
+            //-- this is direct: explicitly save resources in file system
+            const string cacheFolderPath = @"D:\temp\CerSharpFileCache"; 
+            var cacheDir = new System.IO.DirectoryInfo(cacheFolderPath);
+            if (!cacheDir.Exists)
+                cacheDir.Create();
+            browser.ResourceHandlerFactory = new CachingResourceHandlerFactory(uri => !uri.ToString().Contains("DoNotCache"), cacheDir);
+
 
             var bitness = Environment.Is64BitProcess ? "x64" : "x86";
             var version = String.Format("Chromium: {0}, CEF: {1}, CefSharp: {2}, Environment: {3}", Cef.ChromiumVersion, Cef.CefVersion, Cef.CefSharpVersion, bitness);
