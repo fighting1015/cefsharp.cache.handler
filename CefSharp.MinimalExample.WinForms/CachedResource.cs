@@ -12,6 +12,9 @@ namespace CefSharp.MinimalExample.WinForms
         private readonly string _resourceFilePath;
         private readonly string _resourceHeaderFilePath;
 
+        private Stream _readingStream;
+        private Stream _writingStream;
+
         public CachedResource(string filePath)
         {
             _resourceFilePath = filePath;
@@ -36,8 +39,11 @@ namespace CefSharp.MinimalExample.WinForms
         {
             get
             {
+                if(_writingStream == null)
                 //return File.OpenWrite(_resourceFilePath);
-                return File.Open(_resourceFilePath, FileMode.Create, FileAccess.Write, FileShare.Write);
+                _writingStream = File.Open(_resourceFilePath, FileMode.Create, FileAccess.Write, FileShare.Write);
+
+                return _writingStream;
             }
         }
 
@@ -45,8 +51,11 @@ namespace CefSharp.MinimalExample.WinForms
         {
             get
             {
-                //return File.OpenRead(_resourceFilePath);
-                return File.Open(_resourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                if(_readingStream == null)
+                    //return File.OpenRead(_resourceFilePath);
+                    _readingStream = File.Open(_resourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                return _readingStream;
             }
         }
 
